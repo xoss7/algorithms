@@ -17,6 +17,7 @@ void push(int item, stack** top) {
 
 
 stack* pop(stack** top) {
+    if (*top == NULL) { return NULL; } /* Do nothing if stack's empty */
     stack* node = *top;
     *top = (*top)->next;
     return node;
