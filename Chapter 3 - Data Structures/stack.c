@@ -7,20 +7,27 @@ typedef struct stack {
     struct stack* next;
 } stack;
 
+stack* newStack(int data) {
+    stack* node = (stack*)malloc(sizeof(stack));
+    node->item = data;
+    node->next = NULL;
+    return node;
+}
 
 void push(int item, stack** top) {
-    stack* node = (stack*)malloc(sizeof(stack));
-    node->item = item;
+    stack* node = newStack(item);
     node->next = *top;
     *top = node;
 }
 
 
-stack* pop(stack** top) {
-    if (*top == NULL) { return NULL; } /* Do nothing if stack's empty */
+int pop(stack** top) {
+    if (*top == NULL) { return EXIT_FAILURE; } /* Do nothing if stack's empty */
     stack* node = *top;
     *top = (*top)->next;
-    return node;
+    int popped = node->item;
+    free(node);
+    return popped;
 }
 
 void printStack(stack* top) {
