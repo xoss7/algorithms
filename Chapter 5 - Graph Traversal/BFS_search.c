@@ -14,15 +14,15 @@ void init_search(state *states, int* bfs_tree, int nvertices) {
 
 
 void process_edge(int x, int y) {
-    printf("%d ", y);
+    // printf("%d ", y);
 }
 
 
-void process_vertex(int vID) {
-    printf("Vertex %d: ", vID);
+bool process_vertex(int vID, int goal) {
+    return vID == goal;
 }
 
-int* bfs(graph* g, int start) {
+int* bfs(graph* g, int start, int goal) {
     queue* q;                                   /* queue structure */
     int vID;                                    /* iterator for vertices */
     edgenode* adj = malloc(sizeof(edgenode));   /* iterates over adjacent vertices of a vertex */
@@ -38,7 +38,9 @@ int* bfs(graph* g, int start) {
 
     while ( empty(q) == FALSE) {
         vID = dequeue(q);
-        process_vertex(vID);   /* process vertex */
+        if (process_vertex(vID, goal) == TRUE ) {
+            break;
+        }/* process vertex */
         
         adj = g->edges[vID];
         while (adj != NULL) {
@@ -58,11 +60,21 @@ int* bfs(graph* g, int start) {
 }
 
 
+void shortest_path(int* parent_tree, int goal) {
+    if (parent_tree == NULL || goal == -1) return;
+
+    shortest_path(parent_tree, parent_tree[goal]);
+    printf("%d -> ", goal);
+}
+
+
 int main() {
     graph* g;
     read_graph(&g, TRUE);
 
-    bfs(g, 0);
+    int* parent_tree = bfs(g, 0, 5);
+    shortest_path(parent_tree, 5);
+    printf("\n");
 
     return 0;
 }
