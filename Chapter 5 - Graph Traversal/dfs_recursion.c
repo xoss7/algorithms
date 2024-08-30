@@ -34,15 +34,25 @@ void init_search(graph* g) {
 
 
 void process_vertex_early(int vertex) {
-    printf("%d\n", vertex);
 }
 
 void process_vertex_late(int vertex) {
+}
 
+void find_path(int start, int end) {
+    if (start == end || end == -1) {
+        printf(" %d", end);
+    } else {
+        find_path(start, parent[end]);
+        printf(" %d", end);
+    }
 }
 
 void process_edge(int x, int y) {
-    printf("edge (%d, %d)\n", x, y);
+    if (state[y] == DISCOVERED && parent[x] != y) {
+        printf("\nCycle:");
+        find_path(y, x);
+    }
 }
 
 void dfs(graph* g, int vertex) { 
@@ -58,13 +68,10 @@ void dfs(graph* g, int vertex) {
     while (p != NULL) {
         
         if (state[p->y] == UNDISCOVERED) {
-            process_edge(vertex, p->y);
             parent[p->y] = vertex;
             dfs(g, p->y);
-        } else if (state[p->y] != PROCESSED || g->directed) {
+        } else {
             process_edge(vertex, p->y);
-
-            if (finished) return;
         }
 
         if (finished) return;
@@ -76,4 +83,23 @@ void dfs(graph* g, int vertex) {
 
     exit_time[vertex] = dfs_time;
     dfs_time++;
+}
+
+void find_cycles(graph* g) {
+    for (int i = 0; i < (g->nvertices); ++i) {
+        if (state[i] == UNDISCOVERED)
+            dfs(g, i);
+    }   
+}
+
+
+int main(void) {
+    graph* g;
+    
+    read_graph(&g, TRUE);
+    init_search(g);
+
+    find_cycles(g);
+    printf("\n");
+    return 0;
 }
