@@ -28,3 +28,11 @@ int pop(stack **s) {
     free(top);
     return data;
 }
+
+void print_stack(stack* s) {
+    while ( empty(s) == FALSE) {
+        printf("%d -> ", s->data);
+        s = s->next;
+    }
+    printf("NIL\n");
+}
