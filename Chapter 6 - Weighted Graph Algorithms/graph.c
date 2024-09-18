@@ -71,7 +71,7 @@ void print_graph(graph* g) {
         p = g->edges[i];
         
         while (p != NULL) {
-            printf("%d ", p->y);
+            printf("(%d, w = %d) ", p->y, p->weight);
             p = p->next;
         }
         printf("\n");
